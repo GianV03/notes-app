@@ -5,7 +5,6 @@ const Note = require('../models/Note');
 notesCtrl.getNotes = async (req, res) => {
 
     const notes = await Note.find();
-    console.log(notes);
     res.json(notes);
 
 };
@@ -15,8 +14,7 @@ notesCtrl.createNote = async (req, res) => {
     const newNote = new Note(req.body);
 
     await newNote.save();
-
-    res.json({message : 'The note was saved'});
+    res.json({message : 'The Note was saved'});
 
 };
 
