@@ -1,9 +1,45 @@
 notesCtrl = {};
 
-notesCtrl.getNotes = (req, res) => res.json({message : 'GET Endpoint'});
-notesCtrl.createNote = (req, res) => res.json({message : 'POST Endpoint'});
-notesCtrl.getNote = (req, res) => res.json({id : '2432534'});
-notesCtrl.updateNote = (req, res) => res.json({id : '234235234'});
-notesCtrl.deleteNote = (req, res) => res.json({id : '234254234'});
+const Note = require('../models/Note');
+
+notesCtrl.getNotes = async (req, res) => {
+
+    const notes = await Note.find();
+    console.log(notes);
+    res.json(notes);
+
+};
+
+notesCtrl.createNote = async (req, res) => {
+
+    const newNote = new Note(req.body);
+
+    await newNote.save();
+
+    res.json({message : 'The note was saved'});
+
+};
+
+notesCtrl.getNote = async (req, res) => {
+
+    const note = await Note.findById(req.params.id);
+    res.json(note);
+
+}
+
+notesCtrl.updateNote = async (req, res) => {
+
+    const updatedNote = await Note.findByIdAndUpdate(req.params.id, req.body);
+    console.log(updatedNote);
+    res.json({message : 'The note was updated'})
+}
+
+notesCtrl.deleteNote = async (req, res) => {
+    
+    await Note.findByIdAndDelete(req.params.id);
+    res.json({message : 'The note was deleted'});
+
+}
+
 
 module.exports = notesCtrl;
