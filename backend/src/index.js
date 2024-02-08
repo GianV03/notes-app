@@ -3,8 +3,8 @@ require('./database');
 
 // start function
 async function main(){
-    await app.listen(4000);
-    console.log('server on port 4000');
+    await app.listen(app.get('port'));
+    console.log(`Server on port ${app.get('port')}`);
 }
 
 main();
