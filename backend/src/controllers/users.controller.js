@@ -12,7 +12,7 @@ usersCtrl.getUsers = async (req, res)=> {
 
 usersCtrl.createUser = async (req, res)=> {
 
-    const newUSer = new User(req.body);
+    const newUser = new User(req.body);
     await newUser.save();
     res.json({message : 'The User was create'});
 
@@ -34,7 +34,7 @@ usersCtrl.updateUser = async (req, res) => {
 
 usersCtrl.deleteUser = async (req, res) => {
 
-    await Note.findByIdAndDelete(req.params.id);
+    await User.findByIdAndDelete(req.params.id);
     res.json({message : 'The user was deleted'});
 
 }
