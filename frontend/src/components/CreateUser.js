@@ -52,7 +52,7 @@ export default class CreateUser extends Component {
                   />
                 </div>
                 <button type="submit" className="btn btn-primary">
-                  Create
+                    Create
                 </button>
               </form>
             </div>
