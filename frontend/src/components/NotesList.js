@@ -41,12 +41,30 @@ const Noteslist = () =>{
 
     });
 
+  }
 
+  const changeOrder = (e) =>{
+    if(e.target.value = 'time'){
+
+    }
+     if(e.target.value = 'category'){
+     
+     }
   }
 
     return (
 
       <div className="row">
+        <div className="col-md-12 d-flex justify-content-end">
+          <div className="col-md-4">
+            <select className="form-control" onChange={changeOrder}>
+              <option value="defaul">Order</option>
+              <option value ="time">Time</option>
+              <option value ="category">Category</option>
+            </select> 
+          </div>
+        </div>
+        <br></br>
         {
           notes.map(
             
