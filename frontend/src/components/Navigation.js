@@ -21,6 +21,9 @@ const Navigation = () => {
                 <Link className="nav-link" to="/create">Create Note</Link>
               </li>
               <li className="nav-item">
+                <Link className="nav-link" to="/categories">Create Category</Link>
+              </li>
+              <li className="nav-item">
               <Link className="nav-link" to="/user">Create User</Link>
               </li>
             </ul>

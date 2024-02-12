@@ -11,16 +11,21 @@ const CreateNote = () => {
   /** States */
   const [users, setUsers] = useState([]);
   const [userSelected, setUserSelected] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [date, setDate] = useState(new Date());
-  const [isNew, setNew] = useState(false);
+  const [isNew, setNew] = useState(true);
   const [_id, setId] = useState('');
 
   /** Brings needed data from the backend */
   const initValues = async () =>{
     const usersRes = await axios.get('http://localhost:4000/api/users');
+    const categoriesRes = await axios.get('http://localhost:4000/api/categories');
 
+    setCategories(categoriesRes.data);
+    setSelectedCategory(categoriesRes.data[0]);
     setUsers( usersRes.data.map(user=> user.username) );
     setUserSelected( usersRes.data[0].username );
 
@@ -30,9 +35,10 @@ const CreateNote = () => {
       const note = await axios.get(`http://localhost:4000/api/notes/${ id }`);
 
       setUserSelected( note.data.author );
+      setSelectedCategory(note.data.category);
       setTitle( note.data.title );
       setContent( note.data.content );
-      setDate( Date(note.data.date) );
+      setDate(new Date(note.data.date));
       setNew(false);
       setId( id ); 
 
@@ -50,19 +56,22 @@ const CreateNote = () => {
 
     e.preventDefault();
 
+
     const newNote  = {
+      categoryId: selectedCategory,
       title: title,
       content: content,
       date: date,
       author: userSelected
     };
 
+
     if(isNew){
 
       axios.post('http://localhost:4000/api/notes', newNote);
 
     }else{
-
+      console.log(newNote)
       axios.put(`http://localhost:4000/api/notes/${_id}`, newNote);
 
     }
@@ -78,10 +87,10 @@ const CreateNote = () => {
   
     /** Stores the actions to every 'name' */
     const actions = {
+      'category': setSelectedCategory,
       'userSelected': setUserSelected,
       'title': setTitle,
       'content': setContent,
-      'date': (dateValue) => setDate(new Date(dateValue)),
     };
     
     if (actions[name]) {
@@ -91,7 +100,8 @@ const CreateNote = () => {
   }
 
   const onChangeDate = date => {
-     setDate(date);
+      console.log(date)
+     setDate(new Date(date));
   }
 
 
@@ -119,15 +129,35 @@ const CreateNote = () => {
             </select>
           </div>
 
+          {/** SELECT CATEGORY */}
+          <div className="form-group">
+            <select 
+            className="form-control"
+            name="category"
+            onChange={ onInputChange}
+            value={selectedCategory}
+            >
+              {
+                 categories.map(category=> 
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>)
+              }
+              
+            </select>
+          </div>
+
+          {/** Title */}
           <div className="form-group">
             <input type="text" 
               className="form-control" name="title"  
               onChange={ onInputChange}
               placeholder="Title" required 
-              value={ title}
+              value={title}
               />
           </div>
 
+          {/** Content */}
           <div className="form-group">
             <textarea name="content" 
               className="form-control" placeholder="content"
@@ -136,6 +166,7 @@ const CreateNote = () => {
               ></textarea>
           </div>
 
+          {/** Date */}
           <div className="form-group">
             <DatePicker 
               className="form-control" 
@@ -152,7 +183,7 @@ const CreateNote = () => {
 
           </form>
         </div>
-      </div>
+        </div>
 
     );
 

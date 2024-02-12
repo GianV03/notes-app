@@ -1,54 +1,52 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
-export default class CreateUser extends Component {
+const CreateUser = () =>{
 
-  state = {
-    users:[],
-    username: ''
-  }
+  const [users, setUsers] = useState([]);
+  const [username, setUsername] = useState();
 
-  async componentDidMount(){
-    this.getUsers();
-  }
+  useEffect(()=>{
+    getUsers();
+  },[]);
 
-  getUsers = async () => {
+  const getUsers = async () => {
     const res = await axios.get('http://localhost:4000/api/users');
-    this.setState({users: res.data});
+    setUsers(res.data);
   }
 
-  onChangeUsername = (e) => {
-    this.setState({
-      username: e.target.value
-    });
+  const onChangeUsername = (e) => {
+    setUsername(e.target.value);
   }
 
-   onSubmit = async e =>{
+   const onSubmit = async e =>{
+
     e.preventDefault();
-    await axios.post('http://localhost:4000/api/users', { username : this.state.username });
+    
+    await axios.post('http://localhost:4000/api/users', { username : username });
 
-    this.setState({username : ''})
+    setUsername('');
 
-    this.getUsers();
+    getUsers();
   }
 
-  deleteUser = async (id) =>{
+  const deleteUser = async (id) =>{
     await axios.delete('http://localhost:4000/api/users/' + id);
-    this.getUsers();
+    getUsers();
   }
 
-  render() {
     return (
+
       <div className="row">
         <div className="col-md-4">
             <div className="card card-body">
               <h3> Create New User </h3>
-              <form onSubmit={this.onSubmit}>
+              <form onSubmit={onSubmit}>
                 <div className="form-group">
                   <input 
                   type="text" className="form-control" 
-                  onChange={this.onChangeUsername} 
-                  value={this.state.username}
+                  onChange={onChangeUsername} 
+                  value={username}
                   />
                 </div>
                 <button type="submit" className="btn btn-primary">
@@ -60,10 +58,10 @@ export default class CreateUser extends Component {
         <div className="col-md-8">
           <ul className="list-group">
           {
-            this.state.users.map(user=> (
+            users.map(user=> (
               <li className="list-group-item list-group-item-action" 
                 key={user._id}
-                onDoubleClick={()=> this.deleteUser(user._id)}
+                onDoubleClick={()=> deleteUser(user._id)}
                 >
                 {user.username}
               </li>)
@@ -72,6 +70,9 @@ export default class CreateUser extends Component {
           </ul>
         </div>
       </div>
-    )
-  }
+
+    );
+
 }
+
+export default CreateUser;
