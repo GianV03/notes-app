@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Navigation from './components/Navigation'
@@ -17,10 +17,12 @@ function App() {
 
     <div className="container p-4">
       
-      <Route path="/" exact component={NotesList} />
-      <Route path="/edit/:id" component={CreateNote} />
-      <Route path="/create" component={CreateNote} />
-      <Route path="/user" component={CreateUser} />
+     <Routes>
+     <Route path="/" exact element={<NotesList />} />
+      <Route path="/edit/:id" element={<CreateNote />} />
+      <Route path="/create" element={<CreateNote />} />
+      <Route path="/user" element={<CreateUser />} />
+     </Routes>
       
     </div>
 
